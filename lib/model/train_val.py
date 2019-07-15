@@ -309,8 +309,8 @@ class SolverWrapper(object):
         ss_paths.append(ss_path)
 
         # Remove the old snapshots if there are too many
-        if len(np_paths) > cfg.TRAIN.SNAPSHOT_KEPT:
-          self.remove_snapshot(np_paths, ss_paths)
+        # if len(np_paths) > cfg.TRAIN.SNAPSHOT_KEPT:
+        #   self.remove_snapshot(np_paths, ss_paths)
 
       iter += 1
 
