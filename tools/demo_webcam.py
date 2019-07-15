@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 # Tensorflow Faster R-CNN
 # Licensed under The MIT License [see LICENSE for details]
-# Written by Xinlei Chen, based on code from Ross Girshick
+# Written by Vinh Nguyen, based on demo.py
 # --------------------------------------------------------
 
 """
@@ -32,47 +32,27 @@ from nets.resnet_v1 import resnetv1
 
 CLASSES = ('__background__', 'person')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_50001.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_70000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
 def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
+
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
         return
 
-    im = im[:, :, (2, 1, 0)]
-    fig, ax = plt.subplots(figsize=(12, 12))
-    ax.imshow(im, aspect='equal')
     for i in inds:
         bbox = dets[i, :4]
         score = dets[i, -1]
+        text = '{:s} {:.2f}'.format(class_name, score)
+        cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0,255,0), 2)
+        cv2.putText(im, text, (int(bbox[0]), int(bbox[1]) - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), lineType=cv2.LINE_AA)
 
-        ax.add_patch(
-            plt.Rectangle((bbox[0], bbox[1]),
-                          bbox[2] - bbox[0],
-                          bbox[3] - bbox[1], fill=False,
-                          edgecolor='red', linewidth=3.5)
-            )
-        ax.text(bbox[0], bbox[1] - 2,
-                '{:s} {:.3f}'.format(class_name, score),
-                bbox=dict(facecolor='blue', alpha=0.5),
-                fontsize=14, color='white')
+    cv2.imshow('', im)
 
-    ax.set_title(('{} detections with '
-                  'p({} | box) >= {:.1f}').format(class_name, class_name,
-                                                  thresh),
-                  fontsize=14)
-    plt.axis('off')
-    plt.tight_layout()
-    plt.draw()
-
-def demo(sess, net, image_name):
+def demo(sess, net, im):
     """Detect object classes in an image using pre-computed object proposals."""
-
-    # Load the demo image
-    im_file = os.path.join(cfg.DATA_DIR, 'demo', image_name)
-    im = cv2.imread(im_file)
 
     # Detect all object classes and regress object bounds
     timer = Timer()
@@ -80,6 +60,8 @@ def demo(sess, net, image_name):
     scores, boxes = im_detect(sess, net, im)
     timer.toc()
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
+
+    cv2.imshow('', im)
 
     # Visualize detections for each class
     CONF_THRESH = 0.8
@@ -99,11 +81,26 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Tensorflow Faster R-CNN demo')
     parser.add_argument('--net', dest='demo_net', help='Network to use [vgg16 res101]',
                         choices=NETS.keys(), default='res101')
-    parser.add_argument('--dataset', dest='dataset', help='Trained dataset [pascal_voc pascal_voc_0712]',
+    parser.add_argument('--dataset', dest='dataset', help='Trained dataset [pascal_voc pascal_voc]',
                         choices=DATASETS.keys(), default='pascal_voc')
     args = parser.parse_args()
 
     return args
+
+def demo_webcam():
+    ''' Capture video from webcam '''
+    cap = cv2.VideoCapture(0)
+
+    while(True):
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+        # Display the frame with bounding boxes
+        demo(sess, net, frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    # When everything done, release the capture
+    cap.release()
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     cfg.TEST.HAS_RPN = True  # Use RPN for proposals
@@ -123,7 +120,7 @@ if __name__ == '__main__':
     # set config
     tfconfig = tf.ConfigProto(allow_soft_placement=True)
     tfconfig.gpu_options.allow_growth=True
-
+    
     # init session
     sess = tf.Session(config=tfconfig)
     # load network
@@ -140,12 +137,5 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    im_names = ['000456.jpg', '000542.jpg', '001150.jpg',
-                '001763.jpg', '004545.jpg']
+    demo_webcam()
 
-    for im_name in im_names:
-        print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-        print('Demo for data/demo/{}'.format(im_name))
-        demo(sess, net, im_name)
-
-    plt.show()
