@@ -59,7 +59,7 @@ set -x
 
 if [ ! -f ${NET_FINAL}.index ]; then
   if [[ ! -z  ${EXTRA_ARGS_SLUG}  ]]; then
-    CUDA_VISIBLE_DEVICES=${GPU_ID} time python ./tools/trainval_net.py \
+    CUDA_VISIBLE_DEVICES=${GPU_ID} time python3 ./tools/trainval_net.py \
       --weight data/imagenet_weights/${NET}.ckpt \
       --imdb ${TRAIN_IMDB} \
       --imdbval ${TEST_IMDB} \
@@ -70,7 +70,7 @@ if [ ! -f ${NET_FINAL}.index ]; then
       --set ANCHOR_SCALES ${ANCHORS} ANCHOR_RATIOS ${RATIOS} \
       TRAIN.STEPSIZE ${STEPSIZE} ${EXTRA_ARGS}
   else
-    CUDA_VISIBLE_DEVICES=${GPU_ID} time python ./tools/trainval_net.py \
+    CUDA_VISIBLE_DEVICES=${GPU_ID} time python3 ./tools/trainval_net.py \
       --weight data/imagenet_weights/${NET}.ckpt \
       --imdb ${TRAIN_IMDB} \
       --imdbval ${TEST_IMDB} \
