@@ -35,11 +35,12 @@ class pascal_voc(imdb):
     self._devkit_path = self._get_default_path()
     self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
     self._classes = ('__background__',  # always index 0
-                     'aeroplane', 'bicycle', 'bird', 'boat',
-                     'bottle', 'bus', 'car', 'cat', 'chair',
-                     'cow', 'diningtable', 'dog', 'horse',
-                     'motorbike', 'person', 'pottedplant',
-                     'sheep', 'sofa', 'train', 'tvmonitor')
+                    #  'aeroplane', 'bicycle', 'bird', 'boat',
+                    #  'bottle', 'bus', 'car', 'cat', 'chair',
+                    #  'cow', 'diningtable', 'dog', 'horse',
+                    #  'motorbike', 'person', 'pottedplant',
+                    #  'sheep', 'sofa', 'train', 'tvmonitor')
+                    'plasticbag')
     self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
     self._image_ext = '.jpg'
     self._image_index = self._load_image_set_index()
@@ -141,23 +142,13 @@ class pascal_voc(imdb):
 
   def _load_pascal_annotation(self, index):
     """
-    Load image and bounding boxes info from XML file in the PASCAL VOC
+    Load image and bounding boxes info from TXT file in the PASCAL VOC
     format.
     """
-    filename = os.path.join(self._data_path, 'Annotations', index + '.xml')
-    tree = ET.parse(filename)
-    objs = tree.findall('object')
-    if not self.config['use_diff']:
-      # Exclude the samples labeled as difficult
-      non_diff_objs = [
-        obj for obj in objs if int(obj.find('difficult').text) == 0]
-      # if len(non_diff_objs) != len(objs):
-      #     print 'Removed {} difficult objects'.format(
-      #         len(objs) - len(non_diff_objs))
-      objs = non_diff_objs
-    cls_objs = [obj for obj in objs if obj.find('name').text in self._classes]
-    objs = cls_objs
-    num_objs = len(objs)
+    filename = os.path.join(self._data_path, 'Annotations', index + '.txt')
+    r = open(filename, 'r')
+
+    num_objs = sum(1 for line in open(filename))
 
     boxes = np.zeros((num_objs, 4), dtype=np.uint16)
     gt_classes = np.zeros((num_objs), dtype=np.int32)
@@ -167,15 +158,16 @@ class pascal_voc(imdb):
 
     img = cv2.imread(os.path.join(self._data_path, 'JPEGImages', index + '.jpg'))
 
-    # Load object bounding boxes into a data frame.
-    for ix, obj in enumerate(objs):
-      bbox = obj.find('bndbox')
-      # Make pixel indexes 0-based
-      x1 = float(bbox.find('xmin').text) - 1
-      y1 = float(bbox.find('ymin').text) - 1
-      x2 = float(bbox.find('xmax').text) - 1
-      y2 = float(bbox.find('ymax').text) - 1
-      cls = self._class_to_ind[obj.find('name').text.lower().strip()]
+    for ix, line in enumerate(r):
+      cls_name = 'plasticbag'
+      cls = self._class_to_ind[cls_name.lower().strip()]
+      words = line.split()
+      # print(words)
+      x1 = float(words[len(words)-4])
+      y1 = float(words[len(words)-3])
+      x2 = float(words[len(words)-2])
+      y2 = float(words[len(words)-1])
+      assert(x1 >= 0 and y1 >= 0 and x2 >= 0 and y2 >= 0)
       boxes[ix, :] = [x1, y1, x2, y2]
       gt_classes[ix] = cls
       overlaps[ix, cls] = 1.0

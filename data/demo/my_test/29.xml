@@ -1,0 +1,38 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>29.jpeg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/29.jpeg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>275</width>
+		<height>183</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>134</xmin>
+			<ymin>109</ymin>
+			<xmax>154</xmax>
+			<ymax>125</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>129</xmin>
+			<ymin>126</ymin>
+			<xmax>154</xmax>
+			<ymax>150</ymax>
+		</bndbox>
+	</object>
+</annotation>
