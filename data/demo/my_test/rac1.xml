@@ -1,0 +1,38 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>rac1.jpg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/rac1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>435</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>1</ymin>
+			<xmax>391</xmax>
+			<ymax>433</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>393</xmin>
+			<ymin>99</ymin>
+			<xmax>686</xmax>
+			<ymax>326</ymax>
+		</bndbox>
+	</object>
+</annotation>

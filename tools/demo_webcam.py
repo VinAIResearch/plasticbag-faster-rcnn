@@ -35,7 +35,8 @@ CLASSES = ('__background__',  # always index 0
             'bottle', 'bus', 'car', 'cat', 'chair',
             'cow', 'diningtable', 'dog', 'horse',
             'motorbike', 'person', 'pottedplant',
-            'sheep', 'sofa', 'train', 'tvmonitor')
+            'sheep', 'sofa', 'train', 'tvmonitor',
+            'plasticbag')
 
 NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
@@ -51,8 +52,18 @@ def vis_detections(im, class_name, dets, thresh=0.5):
         bbox = dets[i, :4]
         score = dets[i, -1]
         text = '{:s} {:.2f}'.format(class_name, score)
-        cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0,255,0), 2)
-        cv2.putText(im, text, (int(bbox[0]), int(bbox[1]) - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), lineType=cv2.LINE_AA)
+        cv2.rectangle(im, 
+                    (bbox[0], bbox[1]), 
+                    (bbox[2], bbox[3]), 
+                    ((0, 255, 0) if class_name == 'person' else (43,0,255)), 
+                    1)
+        cv2.putText(im, 
+                    text, 
+                    (int(bbox[0]) + 1, int(bbox[1]) + 10), 
+                    cv2.FONT_HERSHEY_PLAIN, 
+                    0.8, 
+                    ((0, 255, 0) if class_name == 'person' else (43,0,255)),
+                    lineType=cv2.LINE_AA)
 
     cv2.imshow('', im)
 
@@ -73,6 +84,8 @@ def demo(sess, net, im):
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
+        if cls != 'person' and cls != 'plasticbag':
+            continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
@@ -87,14 +100,14 @@ def parse_args():
     parser.add_argument('--net', dest='demo_net', help='Network to use [vgg16 res101]',
                         choices=NETS.keys(), default='res101')
     parser.add_argument('--dataset', dest='dataset', help='Trained dataset [pascal_voc pascal_voc]',
-                        choices=DATASETS.keys(), default='pascal_voc')
+                        choices=DATASETS.keys(), default='pascal_voc_0712')
     args = parser.parse_args()
 
     return args
 
 def demo_webcam():
     ''' Capture video from webcam '''
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0) # os.path.join(cfg.DATA_DIR, 'demo', 'pets2006_1.avi'))
 
     while(True):
         # Capture frame-by-frame

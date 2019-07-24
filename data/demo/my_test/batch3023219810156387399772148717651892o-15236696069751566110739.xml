@@ -1,0 +1,74 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>batch3023219810156387399772148717651892o-15236696069751566110739.jpg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/batch3023219810156387399772148717651892o-15236696069751566110739.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>2000</width>
+		<height>1500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>7</xmin>
+			<ymin>658</ymin>
+			<xmax>1316</xmax>
+			<ymax>1500</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>793</xmin>
+			<ymin>1</ymin>
+			<xmax>1252</xmax>
+			<ymax>247</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1400</xmin>
+			<ymin>65</ymin>
+			<xmax>1525</xmax>
+			<ymax>142</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1484</xmin>
+			<ymin>231</ymin>
+			<xmax>1722</xmax>
+			<ymax>347</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1734</xmin>
+			<ymin>199</ymin>
+			<xmax>1995</xmax>
+			<ymax>303</ymax>
+		</bndbox>
+	</object>
+</annotation>

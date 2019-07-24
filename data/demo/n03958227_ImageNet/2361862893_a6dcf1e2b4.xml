@@ -1,0 +1,26 @@
+<annotation>
+	<folder>n03958227_urlimages</folder>
+	<filename>2361862893_a6dcf1e2b4.jpg</filename>
+	<path>/home/thanhvinh/ImageNet_Utils/n03958227/n03958227_urlimages/2361862893_a6dcf1e2b4.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>353</width>
+		<height>500</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>44</xmin>
+			<ymin>14</ymin>
+			<xmax>334</xmax>
+			<ymax>495</ymax>
+		</bndbox>
+	</object>
+</annotation>

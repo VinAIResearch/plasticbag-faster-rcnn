@@ -1,0 +1,38 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>1528735802-rac-nhua.jpg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/1528735802-rac-nhua.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>748</width>
+		<height>421</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>245</xmin>
+			<ymin>87</ymin>
+			<xmax>473</xmax>
+			<ymax>311</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>572</xmin>
+			<ymin>20</ymin>
+			<xmax>677</xmax>
+			<ymax>103</ymax>
+		</bndbox>
+	</object>
+</annotation>

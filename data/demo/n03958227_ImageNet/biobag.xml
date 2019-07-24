@@ -1,0 +1,26 @@
+<annotation>
+	<folder>n03958227_urlimages</folder>
+	<filename>biobag.jpg</filename>
+	<path>/home/thanhvinh/ImageNet_Utils/n03958227/n03958227_urlimages/biobag.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>302</width>
+		<height>302</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>18</xmin>
+			<ymin>54</ymin>
+			<xmax>286</xmax>
+			<ymax>276</ymax>
+		</bndbox>
+	</object>
+</annotation>

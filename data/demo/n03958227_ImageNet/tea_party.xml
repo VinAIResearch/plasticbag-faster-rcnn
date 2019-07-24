@@ -1,0 +1,38 @@
+<annotation>
+	<folder>n03958227_urlimages</folder>
+	<filename>tea_party.jpg</filename>
+	<path>/home/thanhvinh/ImageNet_Utils/n03958227/n03958227_urlimages/tea_party.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>350</width>
+		<height>410</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>185</ymin>
+			<xmax>124</xmax>
+			<ymax>374</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>214</xmin>
+			<ymin>210</ymin>
+			<xmax>350</xmax>
+			<ymax>402</ymax>
+		</bndbox>
+	</object>
+</annotation>

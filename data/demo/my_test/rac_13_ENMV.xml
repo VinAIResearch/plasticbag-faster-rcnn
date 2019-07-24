@@ -1,0 +1,26 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>rac_13_ENMV.jpeg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/rac_13_ENMV.jpeg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>450</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>22</xmin>
+			<ymin>240</ymin>
+			<xmax>316</xmax>
+			<ymax>426</ymax>
+		</bndbox>
+	</object>
+</annotation>

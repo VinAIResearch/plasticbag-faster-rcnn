@@ -1,0 +1,26 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>Infographics_nilon1.png</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/Infographics_nilon1.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>660</width>
+		<height>893</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>56</xmin>
+			<ymin>60</ymin>
+			<xmax>603</xmax>
+			<ymax>580</ymax>
+		</bndbox>
+	</object>
+</annotation>

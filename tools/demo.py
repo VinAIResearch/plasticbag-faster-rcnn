@@ -37,8 +37,8 @@ CLASSES = ('__background__',
            'bottle', 'bus', 'car', 'cat', 'chair',
            'cow', 'diningtable', 'dog', 'horse',
            'motorbike', 'person', 'pottedplant',
-           'sheep', 'sofa', 'train', 'tvmonitor')
-        # 'plasticbag')
+           'sheep', 'sofa', 'train', 'tvmonitor',
+           'plasticbag')
 
 NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
@@ -93,6 +93,8 @@ def demo(sess, net, im_file):
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
+        if cls != 'person' and cls != 'plasticbag':
+            continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
@@ -147,7 +149,7 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_test', '*.jpg')):
+    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'n03958227_ImageNet', '*.jpg')):
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)

@@ -1,0 +1,38 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>quoc-te-thieu-nhi-5.jpg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/quoc-te-thieu-nhi-5.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>198</xmin>
+			<ymin>3</ymin>
+			<xmax>770</xmax>
+			<ymax>612</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>63</xmin>
+			<ymin>1</ymin>
+			<xmax>832</xmax>
+			<ymax>640</ymax>
+		</bndbox>
+	</object>
+</annotation>

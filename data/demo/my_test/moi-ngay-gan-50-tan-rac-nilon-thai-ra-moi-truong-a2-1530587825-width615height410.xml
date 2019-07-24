@@ -1,0 +1,62 @@
+<annotation>
+	<folder>plastic_bag_test</folder>
+	<filename>moi-ngay-gan-50-tan-rac-nilon-thai-ra-moi-truong-a2-1530587825-width615height410.jpg</filename>
+	<path>/home/thanhvinh/Downloads/plastic_bag_test/moi-ngay-gan-50-tan-rac-nilon-thai-ra-moi-truong-a2-1530587825-width615height410.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>615</width>
+		<height>410</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>183</xmin>
+			<ymin>165</ymin>
+			<xmax>232</xmax>
+			<ymax>199</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>247</xmin>
+			<ymin>147</ymin>
+			<xmax>313</xmax>
+			<ymax>176</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>315</xmin>
+			<ymin>138</ymin>
+			<xmax>615</xmax>
+			<ymax>410</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>plastic bag</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>184</xmin>
+			<ymin>101</ymin>
+			<xmax>281</xmax>
+			<ymax>144</ymax>
+		</bndbox>
+	</object>
+</annotation>
