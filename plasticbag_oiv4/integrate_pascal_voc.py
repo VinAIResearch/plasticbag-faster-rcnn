@@ -18,6 +18,8 @@ voc_ann_path = os.path.join(voc_path, 'Annotations')
 voc_img_path = os.path.join(voc_path, 'JPEGImages')
 voc_sets_path = os.path.join(voc_path, 'ImageSets', 'Main')
 
+voc_backup_path = '../VOCdevkit/VOC2007_backup'
+
 def copy(dir_from, dir_to):
     """ Copy all files from dir_from to dir_to """
     cmd = 'cp'
@@ -34,7 +36,7 @@ random.shuffle(idxs)
 
 # Create train, val, test sets of plasticbag
 train_num = int(len(idxs) / 10 * 4)
-val_num = int(len(idxs) / 10 * 3)
+val_num = int(len(idxs) / 10 * 2)
 test_num = len(idxs) - train_num - val_num
 train = idxs[:train_num]
 val = idxs[train_num:train_num+val_num]
@@ -44,13 +46,16 @@ test = idxs[train_num+val_num:]
 def read_set(dir_set):
     return [line[0:-1] for line in open(dir_set)]
 
-train = train + read_set(os.path.join(voc_sets_path, 'train.txt'))
-val = val + read_set(os.path.join(voc_sets_path, 'val.txt'))
-test = test + read_set(os.path.join(voc_sets_path, 'test.txt'))
+print(len(train))
+print(len(val))
+print(len(test))
+
+train = train + read_set(os.path.join(voc_backup_path, 'ImageSets', 'Main', 'train.txt'))
+val = val + read_set(os.path.join(voc_backup_path, 'ImageSets', 'Main', 'val.txt'))
+test = test + read_set(os.path.join(voc_backup_path, 'ImageSets', 'Main', 'test.txt'))
 trainval = train + val
 
 # Rewrite the .txt files of the sets
-
 def load_objects(idx):
     """ Load objects from .XML files """
     filename = os.path.join(voc_ann_path, idx + '.xml')
@@ -77,7 +82,6 @@ def write_set(set, set_suffix):
     w.close()
 
     for cls_name in CLASSES[1:]: # ignore __background__
-        print(cls_name)
         w = open(os.path.join(voc_sets_path, cls_name + '_' + set_suffix + '.txt'), 'w')
         for idx in set:
             has = sum(1 for obj in objs[idx] if obj['name'] == cls_name)
