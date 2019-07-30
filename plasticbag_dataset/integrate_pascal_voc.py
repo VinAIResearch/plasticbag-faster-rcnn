@@ -35,7 +35,7 @@ idxs = [os.path.splitext(img)[0] for img in os.listdir(plasticbag_img_path)]
 random.shuffle(idxs)
 
 # Create train, val, test sets of plasticbag
-train_num = int(len(idxs) / 10 * 4)
+train_num = int(len(idxs) / 10 * 5)
 val_num = int(len(idxs) / 10 * 2)
 test_num = len(idxs) - train_num - val_num
 train = idxs[:train_num]

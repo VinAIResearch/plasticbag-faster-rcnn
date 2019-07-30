@@ -38,7 +38,7 @@ CLASSES = ('__background__',  # always index 0
             'sheep', 'sofa', 'train', 'tvmonitor',
             'plasticbag')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_200000.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_40000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
 def vis_detections(im, class_name, dets, thresh=0.5):
@@ -107,7 +107,7 @@ def parse_args():
 
 def demo_webcam():
     ''' Capture video from webcam '''
-    cap = cv2.VideoCapture(os.path.join(cfg.DATA_DIR, 'demo', 'test1.mp4'))
+    cap = cv2.VideoCapture(os.path.join(cfg.DATA_DIR, 'demo', 'videos', 'Camera26_TTTM 05_TTTM 05_20190530122703_20190530201558_39027372.mp4'))
 
     while(True):
         # Capture frame-by-frame
