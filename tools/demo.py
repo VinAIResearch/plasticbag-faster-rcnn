@@ -40,7 +40,7 @@ CLASSES = ('__background__',
            'sheep', 'sofa', 'train', 'tvmonitor',
            'plasticbag')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_40000.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
 def vis_detections(im, class_name, dets, thresh=0.5):
@@ -49,31 +49,22 @@ def vis_detections(im, class_name, dets, thresh=0.5):
     if len(inds) == 0:
         return
 
-    im = im[:, :, (2, 1, 0)]
-    fig, ax = plt.subplots(figsize=(12, 12))
-    ax.imshow(im, aspect='equal')
     for i in inds:
         bbox = dets[i, :4]
         score = dets[i, -1]
-
-        ax.add_patch(
-            plt.Rectangle((bbox[0], bbox[1]),
-                          bbox[2] - bbox[0],
-                          bbox[3] - bbox[1], fill=False,
-                          edgecolor='red', linewidth=3.5)
-            )
-        ax.text(bbox[0], bbox[1] - 2,
-                '{:s} {:.3f}'.format(class_name, score),
-                bbox=dict(facecolor='blue', alpha=0.5),
-                fontsize=14, color='white')
-
-    ax.set_title(('{} detections with '
-                  'p({} | box) >= {:.1f}').format(class_name, class_name,
-                                                  thresh),
-                  fontsize=14)
-    plt.axis('off')
-    plt.tight_layout()
-    plt.draw()
+        text = '{:s} {:.2f}'.format(class_name, score)
+        cv2.rectangle(im, 
+                    (bbox[0], bbox[1]), 
+                    (bbox[2], bbox[3]), 
+                    ((0, 255, 0) if class_name == 'person' else (43,0,255)), 
+                    2)
+        cv2.putText(im, 
+                    text, 
+                    (int(bbox[0]) + 1, int(bbox[1]) + 10), 
+                    cv2.FONT_HERSHEY_PLAIN, 
+                    1, 
+                    ((0, 255, 0) if class_name == 'person' else (43,0,255)),
+                    lineType=cv2.LINE_AA)
 
 def demo(sess, net, im_file):
     """Detect object classes in an image using pre-computed object proposals."""
@@ -93,8 +84,8 @@ def demo(sess, net, im_file):
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
-        if cls != 'person' and cls != 'plasticbag':
-            continue
+        # if cls != 'person' and cls != 'plasticbag':
+            # continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
@@ -102,6 +93,7 @@ def demo(sess, net, im_file):
         keep = nms(dets, NMS_THRESH)
         dets = dets[keep, :]
         vis_detections(im, cls, dets, thresh=CONF_THRESH)
+    cv2.imwrite(os.path.join(cfg.DATA_DIR, 'demo', 'results', os.path.basename(im_file)), im)
 
 def parse_args():
     """Parse input arguments."""
@@ -149,7 +141,7 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_test', '*.jpg')):
+    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', '*.png')):
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)
