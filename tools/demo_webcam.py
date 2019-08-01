@@ -107,7 +107,7 @@ def parse_args():
 
 def demo_webcam():
     ''' Capture video from webcam '''
-    cap = cv2.VideoCapture(os.path.join(cfg.DATA_DIR, 'demo', 'test1.mp4'))
+    cap = cv2.VideoCapture(os.path.join(cfg.DATA_DIR, 'demo', 'pets2006_1.avi'))
 
     while(True):
         # Capture frame-by-frame
