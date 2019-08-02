@@ -54,6 +54,8 @@ DATASETS= {'coco': ('coco_2014_train+coco_2014_valminusminival',)}
 def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
 
+    PERSON_THRESH = 0.8
+
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
         return
@@ -62,16 +64,18 @@ def vis_detections(im, class_name, dets, thresh=0.5):
         bbox = dets[i, :4]
         score = dets[i, -1]
         text = '{:s} {:.2f}'.format(class_name, score)
+        if class_name == 'person' and score < PERSON_THRESH:
+            continue
         cv2.rectangle(im, 
                     (bbox[0], bbox[1]), 
                     (bbox[2], bbox[3]), 
                     ((0, 255, 0) if class_name == 'person' else (43,0,255)), 
-                    1)
+                    2)
         cv2.putText(im, 
                     text, 
                     (int(bbox[0]) + 1, int(bbox[1]) + 10), 
                     cv2.FONT_HERSHEY_PLAIN, 
-                    0.8, 
+                    1, 
                     ((0, 255, 0) if class_name == 'person' else (43,0,255)),
                     lineType=cv2.LINE_AA)
 
@@ -86,12 +90,12 @@ def demo(sess, net, im):
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
 
     # Visualize detections for each class
-    CONF_THRESH = 0.8
+    CONF_THRESH = 0.5
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
-        # if cls != 'person' and cls != 'plasticbag':
-            # continue
+        if cls != 'person' and cls != 'backpack' and cls != 'handbag' and cls != 'suitcase':
+            continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
@@ -115,12 +119,14 @@ def parse_args():
     return args
 
 def write_output():
-    ''' Capture video from video '''
+    ''' Capture video '''
     cap = cv2.VideoCapture(os.path.join(cfg.DATA_DIR, 'demo', 'pets2006_1.avi'))
 
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc(*'XVID'), 50.0, (width, height))
+
+    # Output video
+    out = cv2.VideoWriter(os.path.join(cfg.DATA_DIR, 'demo', 'output_pets2006_1.avi'), cv2.VideoWriter_fourcc(*'XVID'), 10, (width, height))
 
     while(True):
         # Capture frame-by-frame
@@ -128,6 +134,7 @@ def write_output():
         if ret == 0: break
         # Display the frame with bounding boxes
         demo(sess, net, frame)
+        # Write on the output video
         out.write(frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

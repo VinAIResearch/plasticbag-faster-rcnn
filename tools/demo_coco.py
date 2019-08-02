@@ -91,7 +91,7 @@ def demo(sess, net, im_file):
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
 
     # Visualize detections for each class
-    CONF_THRESH = 0.8
+    CONF_THRESH = 0.6
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
@@ -152,7 +152,7 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_test', '*.jpg')):
+    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'Screenshot from 2019-08-01 17-31-42.png')):
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)

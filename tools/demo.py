@@ -43,27 +43,39 @@ CLASSES = ('__background__',
 NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
+def get_color(cls):
+    if cls == 'person':
+        return (0, 255, 0)
+    elif cls == 'plasticbag':
+        return (43, 0, 255)
+    else:
+        return (0, 255, 255)
+
 def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
         return
 
+    PERSON_THRESH = 0.9
+
     for i in inds:
         bbox = dets[i, :4]
         score = dets[i, -1]
         text = '{:s} {:.2f}'.format(class_name, score)
+        if class_name == 'person' and score < PERSON_THRESH:
+            continue
         cv2.rectangle(im, 
                     (bbox[0], bbox[1]), 
                     (bbox[2], bbox[3]), 
-                    ((0, 255, 0) if class_name == 'person' else (43,0,255)), 
+                    get_color(class_name), 
                     2)
         cv2.putText(im, 
                     text, 
                     (int(bbox[0]) + 1, int(bbox[1]) + 10), 
                     cv2.FONT_HERSHEY_PLAIN, 
                     1, 
-                    ((0, 255, 0) if class_name == 'person' else (43,0,255)),
+                    get_color(class_name),
                     lineType=cv2.LINE_AA)
 
 def demo(sess, net, im_file):
@@ -80,12 +92,12 @@ def demo(sess, net, im_file):
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
 
     # Visualize detections for each class
-    CONF_THRESH = 0.8
+    CONF_THRESH = 0.7
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
-        # if cls != 'person' and cls != 'plasticbag':
-            # continue
+        if cls != 'person' and cls != 'plasticbag' and cls != 'bottle':
+            continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
@@ -141,7 +153,7 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', '*.png')):
+    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_test', '*.jpg')):
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)
