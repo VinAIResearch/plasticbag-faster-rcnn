@@ -27,8 +27,8 @@ case ${DATASET} in
     TRAIN_IMDB="voc_2007_trainval+voc_2012_trainval"
     TEST_IMDB="voc_2007_test"
     STEPSIZE="[80000]"
-    ITERS=200000
-    ANCHORS="[8,16,32]"
+    ITERS=500000
+    ANCHORS="[2,4,8,16,32,64]"
     RATIOS="[0.5,1,2]"
     ;;
   coco)

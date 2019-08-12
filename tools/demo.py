@@ -40,7 +40,7 @@ CLASSES = ('__background__',
            'sheep', 'sofa', 'train', 'tvmonitor',
            'plasticbag')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_400000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
 def get_color(cls):
@@ -51,20 +51,16 @@ def get_color(cls):
     else:
         return (0, 255, 255)
 
-def vis_detections(im, class_name, dets, thresh=0.5):
+def vis_detections(im, overlay, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
         return
 
-    PERSON_THRESH = 0.9
-
     for i in inds:
         bbox = dets[i, :4]
         score = dets[i, -1]
         text = '{:s} {:.2f}'.format(class_name, score)
-        if class_name == 'person' and score < PERSON_THRESH:
-            continue
         cv2.rectangle(im, 
                     (bbox[0], bbox[1]), 
                     (bbox[2], bbox[3]), 
@@ -72,9 +68,9 @@ def vis_detections(im, class_name, dets, thresh=0.5):
                     2)
         cv2.putText(im, 
                     text, 
-                    (int(bbox[0]) + 1, int(bbox[1]) + 10), 
+                    (int(bbox[0]) + 5, int(bbox[1] - 5)), 
                     cv2.FONT_HERSHEY_PLAIN, 
-                    1, 
+                    0.8, 
                     get_color(class_name),
                     lineType=cv2.LINE_AA)
 
@@ -84,6 +80,9 @@ def demo(sess, net, im_file):
     # Load the demo image
     im = cv2.imread(im_file)
 
+    # Overlay for transparent drawings
+    overlay = im.copy()
+
     # Detect all object classes and regress object bounds
     timer = Timer()
     timer.tic()
@@ -92,7 +91,8 @@ def demo(sess, net, im_file):
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
 
     # Visualize detections for each class
-    CONF_THRESH = 0.7
+    PERSON_THRESH = 0.8
+    CONF_THRESH = 0.6
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
@@ -104,7 +104,8 @@ def demo(sess, net, im_file):
                           cls_scores[:, np.newaxis])).astype(np.float32)
         keep = nms(dets, NMS_THRESH)
         dets = dets[keep, :]
-        vis_detections(im, cls, dets, thresh=CONF_THRESH)
+        vis_detections(im, overlay, cls, dets, thresh=(PERSON_THRESH if cls == 'person' else CONF_THRESH))
+    
     cv2.imwrite(os.path.join(cfg.DATA_DIR, 'demo', 'results', os.path.basename(im_file)), im)
 
 def parse_args():
@@ -147,7 +148,7 @@ if __name__ == '__main__':
     else:
         raise NotImplementedError
     net.create_architecture("TEST", len(CLASSES),
-                          tag='default', anchor_scales=[8, 16, 32])
+                          tag='default', anchor_scales=[2, 4, 8, 16, 32, 64])
     saver = tf.train.Saver()
     saver.restore(sess, tfmodel)
 
