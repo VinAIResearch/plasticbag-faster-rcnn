@@ -74,6 +74,17 @@ def vis_detections(im, overlay, class_name, dets, thresh=0.5):
                     get_color(class_name),
                     lineType=cv2.LINE_AA)
 
+def write_annotations(class_name, dets, thresh, w):
+    """Write annotations to files."""
+    inds = np.where(dets[:, -1] >= thresh)[0]
+    if len(inds) == 0:
+        return
+
+    for i in inds:
+        bbox = dets[i, :4]
+        text = class_name + ' ' + str(bbox[0]) + ' ' + str(bbox[1]) + ' ' + str(bbox[2]) + ' ' + str(bbox[3]) + '\n'
+        w.write(text)
+
 def demo(sess, net, im_file):
     """Detect object classes in an image using pre-computed object proposals."""
 
@@ -90,14 +101,17 @@ def demo(sess, net, im_file):
     timer.toc()
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
 
+    # Write annotations
+    w = open(os.path.join(cfg.DATA_DIR, 'demo', 'results', 'annotations', os.path.basename(im_file)[:-4] + '.txt'), 'w+')
+
     # Visualize detections for each class
     PERSON_THRESH = 0.8
     CONF_THRESH = 0.6
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
-        if cls != 'person' and cls != 'plasticbag' and cls != 'bottle':
-            continue
+        #if cls != 'person' and cls != 'plasticbag' and cls != 'bottle':
+            #continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
@@ -105,8 +119,10 @@ def demo(sess, net, im_file):
         keep = nms(dets, NMS_THRESH)
         dets = dets[keep, :]
         vis_detections(im, overlay, cls, dets, thresh=(PERSON_THRESH if cls == 'person' else CONF_THRESH))
+        write_annotations(cls, dets, (PERSON_THRESH if cls == 'person' else CONF_THRESH), w)
     
-    cv2.imwrite(os.path.join(cfg.DATA_DIR, 'demo', 'results', os.path.basename(im_file)), im)
+    cv2.imwrite(os.path.join(cfg.DATA_DIR, 'demo', 'results', 'images', os.path.basename(im_file)), im)
+    w.close()
 
 def parse_args():
     """Parse input arguments."""
@@ -154,7 +170,7 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_test', '*.jpg')):
+    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_dataset', '*.jpg')):
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)

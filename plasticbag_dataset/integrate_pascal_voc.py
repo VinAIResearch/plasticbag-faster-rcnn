@@ -32,23 +32,37 @@ copy(plasticbag_ann_path, voc_ann_path)
 copy(plasticbag_img_path, voc_img_path)
 
 idxs = [os.path.splitext(img)[0] for img in os.listdir(plasticbag_img_path)]
+# plasticVN images
+idxs_vn = [idx for idx in idxs if idx.startswith('vn_')]
+# OpenImagesV4 + ImageNet images
+idxs = [idx for idx in idxs if not idx.startswith('vn_')]
+
+# Shuffle all images before splitting into sets
+random.shuffle(idxs_vn)
 random.shuffle(idxs)
 
 # Create train, val, test sets of plasticbag
-train_num = int(len(idxs) / 10 * 8)
+## From OpenImagesV4 + ImageNet
+train_num = int(len(idxs) / 10 * 8.5)
 val_num = len(idxs) - train_num
-test_num = len(idxs) - train_num - val_num
 train = idxs[:train_num]
-val = idxs[train_num:train_num+val_num]
-test = idxs[train_num+val_num:]
+val = idxs[train_num:]
+
+## From plasticVN - my own dataset
+train_num = int(len(idxs_vn) / 10 * 4)
+val_num = int(len(idxs_vn) / 10 * 1)
+test_num = len(idxs_vn) - train_num - val_num
+train = train + idxs_vn[:train_num]
+val = val + idxs_vn[train_num:train_num+val_num]
+test = idxs_vn[train_num+val_num:]
 
 # Integrate with the sets of Pascal VOC
 def read_set(dir_set):
     return [line[0:-1] for line in open(dir_set)]
 
-print(len(train))
-print(len(val))
-print(len(test))
+print('plasticbag train size', len(train))
+print('plasticbag val size', len(val))
+print('plasticbag test size', len(test))
 
 train = train + read_set(os.path.join(voc_backup_path, 'ImageSets', 'Main', 'train.txt'))
 val = val + read_set(os.path.join(voc_backup_path, 'ImageSets', 'Main', 'val.txt'))

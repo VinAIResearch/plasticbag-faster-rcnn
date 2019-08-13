@@ -9,7 +9,6 @@ lib/pycocotools/_mask.c
 lib/pycocotools/_mask.so
 .idea
 VOCdevkit*
-plasticbag_dataset.zip
-plasticbag_dataset/annotations
-plasticbag_dataset/images
+plasticbag_dataset/*
+!plasticbag_dataset/integrate_pascal_voc.py
 data/demo*

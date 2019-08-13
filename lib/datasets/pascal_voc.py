@@ -40,7 +40,7 @@ class pascal_voc(imdb):
                      'cow', 'diningtable', 'dog', 'horse',
                      'motorbike', 'person', 'pottedplant',
                      'sheep', 'sofa', 'train', 'tvmonitor',
-                     'plasticbag')
+                     'plasticbag') # add to the original classes
     self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
     self._image_ext = '.jpg'
     self._image_index = self._load_image_set_index()
@@ -112,7 +112,6 @@ class pascal_voc(imdb):
           roidb = pickle.load(fid, encoding='bytes')
       print('{} gt roidb loaded from {}'.format(self.name, cache_file))
       return roidb
-
     gt_roidb = [self._load_pascal_annotation(index)
                 for index in self.image_index]
     with open(cache_file, 'wb') as fid:
@@ -166,8 +165,6 @@ class pascal_voc(imdb):
     # "Seg" area for pascal is just the box area
     seg_areas = np.zeros((num_objs), dtype=np.float32)
 
-    img = cv2.imread(os.path.join(self._data_path, 'JPEGImages', index + '.jpg'))
-
     # Load object bounding boxes into a data frame.
     for ix, obj in enumerate(objs):
       bbox = obj.find('bndbox')
@@ -181,9 +178,6 @@ class pascal_voc(imdb):
       gt_classes[ix] = cls
       overlaps[ix, cls] = 1.0
       seg_areas[ix] = (x2 - x1 + 1) * (y2 - y1 + 1)
-      cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (0,255,0), 2)
-
-    cv2.imwrite(os.path.join(self._data_path, 'ImagesAndAnnotations', index + '.jpg'), img)
 
     overlaps = scipy.sparse.csr_matrix(overlaps)
 
