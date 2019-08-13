@@ -3,17 +3,21 @@ This fork is a Tensorflow implementation of Faster RCNN, which aims to accuratel
 
 **Note**: The fork is mostly based on the implementation of [tf-faster-rcnn](https://github.com/endernewton/tf-faster-rcnn). If you have any problems running the code, please refer to [Issues](https://github.com/endernewton/tf-faster-rcnn/issues) in the original repository first. Also, check out the technical report [An Implementation of Faster RCNN with Study for Region Sampling](https://arxiv.org/pdf/1702.02138.pdf) if needed. For details about the faster RCNN architecture, please refer to [Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks](https://arxiv.org/pdf/1506.01497.pdf).
 
-My work integrates the **PASCAL VOC 2007+2012 dataset** with the custom **PlasticVNOI** dataset (which stands for _**Plastic**bags in **V**iet**n**am + **O**penImages + **I**mageNet_). The **PlasticVNOI** was collected and annotated by myself after taking photos and searching online for images of many polluted streets in Vietnam. Of course, I also had to utilize the well-known _OpenImages_ and _ImageNet_ dataset. This dataset contains over 1000 images with annotations at the moment.
+My work integrates the **PASCAL VOC 2007+2012 dataset** with my custom **PlasticVNOI** dataset (which stands for _**Plastic**bags in **V**iet**n**am + **O**penImages + **I**mageNet_). The **PlasticVNOI** was collected and annotated by myself after taking photos and searching online for images of many polluted streets in Vietnam. I also had to utilize the well-known _OpenImages_ and _ImageNet_ dataset. This dataset contains over 1000 images with annotations at the moment.
 
 ## Detection Performance
-![](data/imgs/gt.png)      |  ![](data/imgs/pred.png)
-:-------------------------:|:-------------------------:
-Displayed Ground Truth on Tensorboard |  Displayed Predictions on Tensorboard
+The current code supports **VGG16**, **Resnet V1** and **Mobilenet V1** models. I mainly tested on the Resnet101 architecture as it seemed to be the best for Faster RCNN compared to VGG16 or Mobilenet. The resulted model for plastic bag detection performs very accurately in high resolution images and closed objects.
 
-## Prerequisites (from the original repository)
-  - A basic Tensorflow installation. The code follows **r1.2** format. If you are using r1.0, please check out the r1.0 branch to fix the slim Resnet block issue. If you are using an older version (r0.1-r0.12), please check out the r0.12 branch. While it is not required, for experimenting the original RoI pooling (which requires modification of the C++ code in tensorflow), you can check out my tensorflow [fork](https://github.com/endernewton/tensorflow) and look for ``tf.image.roi_pooling``.
-  - Python packages you might not have: `cython`, `opencv-python`, `easydict` (similar to [py-faster-rcnn](https://github.com/rbgirshick/py-faster-rcnn)). For `easydict` make sure you have the right version. I use 1.6.
-  - Docker users: Since the recent upgrade, the docker image on docker hub (https://hub.docker.com/r/mbuckler/tf-faster-rcnn-deps/) is no longer valid. However, you can still build your own image by using dockerfile located at `docker` folder (cuda 8 version, as it is required by Tensorflow r1.0.) And make sure following Tensorflow installation to install and use nvidia-docker[https://github.com/NVIDIA/nvidia-docker]. Last, after launching the container, you have to build the Cython modules within the running container. 
+**Some of the results:**
+(`plasticbag` and `person` only)
+
+![](data/imgs/1.jpg)
+![](data/imgs/2.jpg)
+![](data/imgs/5.jpg)
+![](data/imgs/9.jpg)
+
+## Prerequisites
+Please follow the instructions in [the original repository](https://github.com/endernewton/tf-faster-rcnn#prerequisites) to install all prerequisites.
 
 ## Installation
 1. Clone the repository
@@ -220,8 +224,8 @@ tensorboard/[NET]/[DATASET]/default/
 tensorboard/[NET]/[DATASET]/default_val/
 ```
 
-## Scope of improvements
+## Scope of Improvement
 - [x] PASCAL VOC 2007 integration
 - [x] PASCAL VOC 2007+2012 integration
 - [ ] COCO integration
-- [ ] Collect more data with annotations of plastic bags
+- [ ] Collect more data with annotations for plastic bags

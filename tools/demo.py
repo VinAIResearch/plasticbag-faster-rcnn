@@ -40,7 +40,7 @@ CLASSES = ('__background__',
            'sheep', 'sofa', 'train', 'tvmonitor',
            'plasticbag')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_400000.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_90000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
 def get_color(cls):
@@ -110,8 +110,8 @@ def demo(sess, net, im_file):
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
-        #if cls != 'person' and cls != 'plasticbag' and cls != 'bottle':
-            #continue
+        if cls != 'person' and cls != 'plasticbag' and cls != 'bottle':
+            continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
         dets = np.hstack((cls_boxes,
