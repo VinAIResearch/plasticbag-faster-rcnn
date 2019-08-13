@@ -87,22 +87,31 @@ After setting up the `VOCdevkit2007`, repeat the similar process to set up `VOCd
 * To download the development kit code and documentation: http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCdevkit_18-May-2011.tar
 
 **Note**: 
-* We only take into account the two links above because we use the `voc2007_trainval+voc2012trainval` to train/validate our model and the `voc2007_test` to test our result.
+* We only take into account the two links above because we use the `voc_2007_trainval+voc_2012trainval` to train/validate our model and the `voc_2007_test` to test our result.
 * After downloading the train/val data and the devkit, remember to move the `VOC2012` folder of train/val data into the devkit folder. 
 * The devkit folder should be placed in the repository root. In addition, remember to name it `VOCdevkit2012` and create a symlink for the PASCAL VOC 2012 dataset in `data`.
 * Finally, the `VOCdevkit2012` folder should have the exact same structure as the `VOCdevkit2007` folder.
 
 ### Setup the custom dataset for plasticbags (PlasticVNOI) and integrate it with the PASCAL VOC dataset
-Download the **PlasticVNOI** dataset [here](...), and then save it in the `/plasticbag_dataset` folder. Unzip the downloaded file. After that, the `/plasticbag_dataset` folder should have the following structure:
+Download the **PlasticVNOI** dataset [here](https://drive.google.com/open?id=1U-l6YMzqLN0_eq91l17buxnRJzkdWQyV), and then save it into the `/plasticbag_dataset` folder. 
+
+Then, extract the dataset
+```Shell
+cd plasticbag_dataset
+tar xvf plasticVNOI.tar.xz
+cd ..
+```
+
+After that, the `/plasticbag_dataset` folder should have the following structure:
 ```Shell
 /plasticbag_dataset
   /annotaions
-    vn_1.xml
-    vn_2.xml
+    0a553ce06f26e637.xml
+    00a76046606aa888.xml
     ...
   /images
-    vn_1.jpg
-    vn_2.jpg
+    0a553ce06f26e637.jpg
+    00a76046606aa888.jpg
     ...
   integrate_pascal_voc.py
 ```
@@ -117,11 +126,12 @@ Finally, run:
 ```Shell
 cd plasticbag_dataset
 python3 integrate_pascal_voc.py
+cd ..
 ```
 
-Now, **PlasticVNOI** is integrated into `VOCdevkit2007/VOC2007` folder. You may want to checkout the folder to understand what happened.
+Now, the **PlasticVNOI** dataset is integrated into `VOCdevkit2007/VOC2007` folder. You may want to checkout the folder to understand what happened.
 
-### Demo and Test with pre-trained models
+## Demo and Test with pre-trained models
 1. Download pre-trained model
   ```Shell
   # Resnet101 for voc pre-trained on 07+12 set
@@ -155,7 +165,7 @@ Now, **PlasticVNOI** is integrated into `VOCdevkit2007/VOC2007` folder. You may 
   ./experiments/scripts/test_faster_rcnn.sh $GPU_ID pascal_voc_0712 res101
   ```
 
-### Train your own model
+## Train your own model
 1. Download pre-trained models and weights. The current code support VGG16 and Resnet V1 models. Pre-trained models are provided by slim, you can get the pre-trained models [here](https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models) and set them in the ``data/imagenet_weights`` folder. For example for VGG16 model, you can set up like:
    ```Shell
    mkdir -p data/imagenet_weights
