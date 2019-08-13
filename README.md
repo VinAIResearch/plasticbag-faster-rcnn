@@ -3,7 +3,7 @@ This fork is a Tensorflow implementation of Faster RCNN, which aims to accuratel
 
 **Note**: The fork is mostly based on the implementation of [tf-faster-rcnn](https://github.com/endernewton/tf-faster-rcnn). If you have any problems running the code, please refer to [Issues](https://github.com/endernewton/tf-faster-rcnn/issues) in the original repository first. Also, check out the technical report [An Implementation of Faster RCNN with Study for Region Sampling](https://arxiv.org/pdf/1702.02138.pdf) if needed. For details about the faster RCNN architecture, please refer to [Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks](https://arxiv.org/pdf/1506.01497.pdf).
 
-My work integrates the **PASCAL VOC 2007+2012 dataset** with the **PlasticVNOI** dataset (which stands for _**Plastic**bags in **V**iet**n**am + **O**penImages + **I**mageNet_). The **PlasticVNOI** was collected and annotated by myself after taking photos and searching online for images of many polluted streets in Vietnam. Of course, I also had to utilize the well-known _OpenImages_ and _ImageNet_ dataset. This dataset contains over 1000 images and annotations at the moment.
+My work integrates the **PASCAL VOC 2007+2012 dataset** with the custom **PlasticVNOI** dataset (which stands for _**Plastic**bags in **V**iet**n**am + **O**penImages + **I**mageNet_). The **PlasticVNOI** was collected and annotated by myself after taking photos and searching online for images of many polluted streets in Vietnam. Of course, I also had to utilize the well-known _OpenImages_ and _ImageNet_ dataset. This dataset contains over 1000 images with annotations at the moment.
 
 ## Detection Performance
 ![](data/imgs/gt.png)      |  ![](data/imgs/pred.png)
@@ -89,18 +89,20 @@ After setting up the `VOCdevkit2007`, repeat the similar process to set up `VOCd
 * Finally, the `VOCdevkit2012` folder should have the exact same structure as the `VOCdevkit2007` folder.
 
 ### Setup the custom dataset for plasticbags (PlasticVNOI) and integrate it with the PASCAL VOC dataset
-Download the **PlasticVNOI** dataset [here](...), and then save it in the `/plasticbag_dataset` folder. Unzip the downloaded file. Now, the `/plasticbag_dataset` folder should have the following structure:
+Download the **PlasticVNOI** dataset [here](...), and then save it in the `/plasticbag_dataset` folder. Unzip the downloaded file. After that, the `/plasticbag_dataset` folder should have the following structure:
 ```Shell
 /plasticbag_dataset
   /annotaions
     vn_1.xml
+    vn_2.xml
     ...
   /images
     vn_1.jpg
+    vn_2.jpg
     ...
   integrate_pascal_voc.py
 ```
-The integration process of **PlasticVNOI** and **Pascal VOC** would add, remove, and rewrite a bunch of files in `VOCdevkit2007/VOC2007` folder such that it fits both the original and the custom datasets. In order to do that, we have to backup the `VOC2007` folder first:
+The integration process of **PlasticVNOI** and **Pascal VOC** would add, remove, and rewrite a bunch of files in `VOCdevkit2007/VOC2007` folder so that it fits both the original and the custom datasets. In order not to mess  everything up, it is best to backup the `VOC2007` data first:
 ```Shell
 cd VOCdevkit2007
 cp VOC2007 VOC2007_backup
@@ -113,7 +115,7 @@ cd plasticbag_dataset
 python3 integrate_pascal_voc.py
 ```
 
-Now, **PlasticVNOI** is integrated into `VOCdevkit2007/VOC2007` folder. You may want to checkout the folder to understand better what happened.
+Now, **PlasticVNOI** is integrated into `VOCdevkit2007/VOC2007` folder. You may want to checkout the folder to understand what happened.
 
 ### Demo and Test with pre-trained models
 1. Download pre-trained model
@@ -180,7 +182,12 @@ Now, **PlasticVNOI** is integrated into `VOCdevkit2007/VOC2007` folder. You may 
   ./experiments/scripts/train_faster_rcnn.sh 1 coco res101
   ```
 
-3. Test and evaluate
+3. Visualization with Tensorboard
+```Shell
+tensorboard --logdir=tensorboard/vgg16/voc_2007_trainval+voc_2012_trainval/ --port=7001 &
+```
+
+4. Test and evaluate
   ```Shell
   ./experiments/scripts/test_faster_rcnn.sh [GPU_ID] [DATASET] [NET]
   # GPU_ID is the GPU you want to test on
@@ -191,7 +198,7 @@ Now, **PlasticVNOI** is integrated into `VOCdevkit2007/VOC2007` folder. You may 
   ./experiments/scripts/test_faster_rcnn.sh 1 coco res101
   ```
 
-4. You can use ``tools/reval.sh`` for re-evaluation
+5. You can use ``tools/reval.sh`` for re-evaluation
 
 
 By default, trained networks are saved under:
@@ -212,3 +219,9 @@ Tensorboard information for train and validation is saved under:
 tensorboard/[NET]/[DATASET]/default/
 tensorboard/[NET]/[DATASET]/default_val/
 ```
+
+## Scope of improvements
+- [x] PASCAL VOC 2007 integration
+- [x] PASCAL VOC 2007+2012 integration
+- [ ] COCO integration
+- [ ] Collect more data with annotations of plastic bags
