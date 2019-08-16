@@ -11,12 +11,11 @@ My work integrates the **PASCAL VOC 2007+2012 dataset** with the customized **Pl
 The current code supports **VGG16**, **Resnet V1** and **Mobilenet V1** models. I mainly tested on the Resnet101 architecture as it seemed to be the best for Faster RCNN compared to VGG16 or Mobilenet. The resulted model for plastic bag detection performs very accurately in high resolution images and closed objects.
 
 **Some of the results:**
-(`plasticbag` and `person` only)
+(`plasticbag` only)
 
 ![](data/imgs/1.jpg)
 ![](data/imgs/2.jpg)
-![](data/imgs/5.jpg)
-![](data/imgs/9.jpg)
+![](data/imgs/7.jpg)
 
 ## Prerequisites
 
@@ -161,17 +160,14 @@ Now, the **PlasticVNOI** dataset is integrated into `VOCdevkit2007/VOC2007` fold
 
 1. Download pre-trained model
 
+You can download the pre-trained model [here](https://drive.google.com/open?id=1BgFAsSM8oyybCSf4e4kk0JWU60dvDpwE). Save it in the repository root. This model was based on Resnet101 and the combined dataset VOC07 + VOC12 + PlasticVNOI mentioned above.
+
+2. Extract the downloaded model
 ```Shell
-# Resnet101 for voc pre-trained on 07+12 set
-./data/scripts/fetch_faster_rcnn_models.sh
+tar xvf voc_0712_80k-200k.tar.xz
 ```
 
-**Note**: if you cannot download the models through the link, or you want to try more models, you can check out the following solutions and optionally update the downloading script:
-
-- Another server [here](http://xinlei.sp.cs.cmu.edu/xinleic/tf-faster-rcnn/).
-- Google drive [here](https://drive.google.com/open?id=0B1_fAEgxdnvJSmF3YUlZcHFqWTQ).
-
-2. Create a folder and a soft link to use the pre-trained model
+3. Create a folder and a soft link to use the pre-trained model
 
 ```Shell
 NET=res101
@@ -182,17 +178,17 @@ ln -s ../../../data/voc_2007_trainval+voc_2012_trainval ./default
 cd ../../..
 ```
 
-3. Demo for testing on custom images
+4. Demo for testing on custom images
 
 ```Shell
 # at repository root
 GPU_ID=0
-CUDA_VISIBLE_DEVICES=${GPU_ID} ./tools/demo.py
+CUDA_VISIBLE_DEVICES=${GPU_ID} python3 tools/demo.py
 ```
 
 **Note**: Resnet101 testing probably requires several gigabytes of memory, so if you encounter memory capacity issues, please install it with CPU support only. Refer to [Issue 25](https://github.com/endernewton/tf-faster-rcnn/issues/25) in the original repository.
 
-4. Test with pre-trained Resnet101 models
+5. Test with pre-trained Resnet101 models
 
 ```Shell
 GPU_ID=0
@@ -229,7 +225,7 @@ GPU_ID=0
 ./experiments/scripts/train_faster_rcnn.sh [GPU_ID] [DATASET] [NET]
 # GPU_ID is the GPU you want to test on
 # NET in {vgg16, res50, res101, res152} is the network arch to use
-# DATASET {pascal_voc, pascal_voc_0712, coco} is defined in train_faster_rcnn.sh
+# DATASET {pascal_voc, pascal_voc_0712} is defined in train_faster_rcnn.sh. {coco} has not been supported yet.
 # Examples:
 ./experiments/scripts/train_faster_rcnn.sh 0 pascal_voc vgg16
 ./experiments/scripts/train_faster_rcnn.sh 1 pascal_voc_0712 res101
@@ -247,7 +243,7 @@ tensorboard --logdir=tensorboard/vgg16/voc_2007_trainval+voc_2012_trainval/ --po
 ./experiments/scripts/test_faster_rcnn.sh [GPU_ID] [DATASET] [NET]
 # GPU_ID is the GPU you want to test on
 # NET in {vgg16, res50, res101, res152} is the network arch to use
-# DATASET {pascal_voc, pascal_voc_0712, coco} is defined in test_faster_rcnn.sh
+# DATASET {pascal_voc, pascal_voc_0712} is defined in test_faster_rcnn.sh. {coco} has not been supported yet.
 # Examples:
 ./experiments/scripts/test_faster_rcnn.sh 0 pascal_voc vgg16
 ./experiments/scripts/test_faster_rcnn.sh 1 pascal_voc_0712 res101
@@ -275,7 +271,8 @@ tensorboard/[NET]/[DATASET]/default_val/
 ```
 
 ## Scope of Improvement
-
+- [x] Python3 adaption
+- [x] Save every snapshot during the training process
 - [x] PASCAL VOC 2007 integration
 - [x] PASCAL VOC 2007+2012 integration
 - [ ] COCO integration
