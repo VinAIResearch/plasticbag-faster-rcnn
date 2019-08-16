@@ -11,4 +11,3 @@ lib/pycocotools/_mask.so
 VOCdevkit*
 plasticbag_dataset/*
 !plasticbag_dataset/integrate_pascal_voc.py
-data/demo*

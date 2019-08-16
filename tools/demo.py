@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
     print('Loaded network {:s}'.format(tfmodel))
 
-    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', 'my_dataset', '*.jpg')):
+    for im_file in glob.glob(os.path.join(cfg.DATA_DIR, 'demo', '*.jpg')):
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)
