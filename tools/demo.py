@@ -3,7 +3,8 @@
 # --------------------------------------------------------
 # Tensorflow Faster R-CNN
 # Licensed under The MIT License [see LICENSE for details]
-# Written by Xinlei Chen, based on code from Ross Girshick
+# Originally written by Xinlei Chen, based on code from Ross Girshick
+# Modified by Vinh Nguyen
 # --------------------------------------------------------
 
 """
@@ -22,7 +23,6 @@ from model.nms_wrapper import nms
 
 from utils.timer import Timer
 import tensorflow as tf
-import matplotlib.pyplot as plt
 import numpy as np
 import os, cv2
 import argparse
@@ -31,6 +31,7 @@ from nets.vgg16 import vgg16
 from nets.resnet_v1 import resnetv1
 
 import glob
+import sys
 
 CLASSES = ('__background__',
            'aeroplane', 'bicycle', 'bird', 'boat',
@@ -40,7 +41,7 @@ CLASSES = ('__background__',
            'sheep', 'sofa', 'train', 'tvmonitor',
            'plasticbag')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_90000.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_70000.ckpt',),'res101': ('res101_faster_rcnn_iter_200000.ckpt',)}
 DATASETS= {'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 
 def get_color(cls):
@@ -51,7 +52,7 @@ def get_color(cls):
     else:
         return (0, 255, 255)
 
-def vis_detections(im, overlay, class_name, dets, thresh=0.5):
+def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
     inds = np.where(dets[:, -1] >= thresh)[0]
     if len(inds) == 0:
@@ -74,25 +75,11 @@ def vis_detections(im, overlay, class_name, dets, thresh=0.5):
                     get_color(class_name),
                     lineType=cv2.LINE_AA)
 
-def write_annotations(class_name, dets, thresh, w):
-    """Write annotations to files."""
-    inds = np.where(dets[:, -1] >= thresh)[0]
-    if len(inds) == 0:
-        return
-
-    for i in inds:
-        bbox = dets[i, :4]
-        text = class_name + ' ' + str(bbox[0]) + ' ' + str(bbox[1]) + ' ' + str(bbox[2]) + ' ' + str(bbox[3]) + '\n'
-        w.write(text)
-
 def demo(sess, net, im_file):
     """Detect object classes in an image using pre-computed object proposals."""
 
     # Load the demo image
     im = cv2.imread(im_file)
-
-    # Overlay for transparent drawings
-    overlay = im.copy()
 
     # Detect all object classes and regress object bounds
     timer = Timer()
@@ -101,16 +88,13 @@ def demo(sess, net, im_file):
     timer.toc()
     print('Detection took {:.3f}s for {:d} object proposals'.format(timer.total_time, boxes.shape[0]))
 
-    # Write annotations
-    w = open(os.path.join(cfg.DATA_DIR, 'demo', 'results', 'annotations', os.path.basename(im_file)[:-4] + '.txt'), 'w+')
-
     # Visualize detections for each class
     PERSON_THRESH = 0.8
-    CONF_THRESH = 0.6
+    CONF_THRESH = 0.7
     NMS_THRESH = 0.3
     for cls_ind, cls in enumerate(CLASSES[1:]):
         cls_ind += 1 # because we skipped background
-        if cls != 'person' and cls != 'plasticbag' and cls != 'bottle':
+        if cls != 'plasticbag':
             continue
         cls_boxes = boxes[:, 4*cls_ind:4*(cls_ind + 1)]
         cls_scores = scores[:, cls_ind]
@@ -118,11 +102,15 @@ def demo(sess, net, im_file):
                           cls_scores[:, np.newaxis])).astype(np.float32)
         keep = nms(dets, NMS_THRESH)
         dets = dets[keep, :]
-        vis_detections(im, overlay, cls, dets, thresh=(PERSON_THRESH if cls == 'person' else CONF_THRESH))
-        write_annotations(cls, dets, (PERSON_THRESH if cls == 'person' else CONF_THRESH), w)
-    
-    cv2.imwrite(os.path.join(cfg.DATA_DIR, 'demo', 'results', 'images', os.path.basename(im_file)), im)
-    w.close()
+        vis_detections(im, cls, dets, thresh=(PERSON_THRESH if cls == 'person' else CONF_THRESH))
+
+    # Display the resulted image
+    cv2.imshow(im_file, im)
+    key = cv2.waitKey()
+    if (key == ord('q')):
+        sys.exit(0)
+    else:
+        cv2.destroyWindow(im_file)
 
 def parse_args():
     """Parse input arguments."""
@@ -174,5 +162,3 @@ if __name__ == '__main__':
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Demo for data/demo/{}'.format(im_file))
         demo(sess, net, im_file)
-
-    plt.show()

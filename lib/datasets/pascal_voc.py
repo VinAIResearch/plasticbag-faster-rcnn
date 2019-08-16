@@ -2,7 +2,8 @@
 # Fast R-CNN
 # Copyright (c) 2015 Microsoft
 # Licensed under The MIT License [see LICENSE for details]
-# Written by Ross Girshick and Xinlei Chen
+# Orinally written by Ross Girshick and Xinlei Chen
+# Modified by Vinh Nguyen
 # --------------------------------------------------------
 from __future__ import absolute_import
 from __future__ import division

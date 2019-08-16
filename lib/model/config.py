@@ -169,7 +169,7 @@ __C.TEST = edict()
 __C.TEST.SCALES = (800,)
 
 # Max pixel size of the longest side of a scaled input image
-__C.TEST.MAX_SIZE = 2500
+__C.TEST.MAX_SIZE = 1000
 
 # Overlap threshold used for non-maximum suppression (suppress boxes with
 # IoU >= this threshold)
@@ -195,7 +195,7 @@ __C.TEST.RPN_NMS_THRESH = 0.7
 __C.TEST.RPN_PRE_NMS_TOP_N = 6000
 
 # Number of top scoring boxes to keep after applying NMS to RPN proposals
-__C.TEST.RPN_POST_NMS_TOP_N = 500
+__C.TEST.RPN_POST_NMS_TOP_N = 300
 
 # Proposal height and width both need to be greater than RPN_MIN_SIZE (at orig image scale)
 # __C.TEST.RPN_MIN_SIZE = 16
