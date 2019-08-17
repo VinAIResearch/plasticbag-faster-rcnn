@@ -113,7 +113,7 @@ After setting up the `VOCdevkit2007`, repeat the similar process to set up `VOCd
 
 ### Setup the custom dataset for plasticbags (PlasticVNOI) and integrate it with the PASCAL VOC dataset
 
-Download the **PlasticVNOI** dataset [here](https://drive.google.com/open?id=1U-l6YMzqLN0_eq91l17buxnRJzkdWQyV), and then save it into the `/plasticbag_dataset` folder.
+Download the **PlasticVNOI** dataset [here](https://drive.google.com/open?id=1U-l6YMzqLN0_eq91l17buxnRJzkdWQyV), and then save it into the `plasticbag_dataset` folder.
 
 Then, extract the dataset
 
@@ -123,11 +123,11 @@ tar xvf plasticVNOI.tar.xz
 cd ..
 ```
 
-After that, the `/plasticbag_dataset` folder should have the following structure:
+After that, the `plasticbag_dataset` folder should have the following structure:
 
 ```Shell
 /plasticbag_dataset
-  /annotaions
+  /annotations
     0a553ce06f26e637.xml
     00a76046606aa888.xml
     ...
@@ -160,11 +160,14 @@ Now, the **PlasticVNOI** dataset is integrated into `VOCdevkit2007/VOC2007` fold
 
 1. Download pre-trained model
 
-You can download the pre-trained model [here](https://drive.google.com/open?id=1BgFAsSM8oyybCSf4e4kk0JWU60dvDpwE). Save it in the repository root. This model was based on Resnet101 and the combined dataset VOC07 + VOC12 + PlasticVNOI mentioned above.
+You can download the pre-trained model [here](https://drive.google.com/open?id=1BgFAsSM8oyybCSf4e4kk0JWU60dvDpwE). Save it into the `data` folder.
 
 2. Extract the downloaded model
+
 ```Shell
+cd data
 tar xvf voc_0712_80k-200k.tar.xz
+cd ..
 ```
 
 3. Create a folder and a soft link to use the pre-trained model
@@ -271,6 +274,7 @@ tensorboard/[NET]/[DATASET]/default_val/
 ```
 
 ## Scope of Improvement
+
 - [x] Python3 adaption
 - [x] Save every snapshot during the training process
 - [x] PASCAL VOC 2007 integration

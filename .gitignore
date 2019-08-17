@@ -1,6 +1,7 @@
 *.so
 *.pyc
 *.tar
+*.tar.xz
 output
 tensorboard
 lib/build
