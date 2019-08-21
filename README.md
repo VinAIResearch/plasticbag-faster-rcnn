@@ -8,7 +8,10 @@ My work integrates the **PASCAL VOC 2007+2012 dataset** with the customized **Pl
 
 ## Detection Performance
 
-The current code supports **VGG16**, **Resnet V1** and **Mobilenet V1** models. I mainly tested on the Resnet101 architecture as it seemed to be the best for Faster RCNN compared to VGG16 or Mobilenet. The resulted model for plastic bag detection performs very accurately in high resolution images and closed objects.
+The current code supports **VGG16**, **Resnet V1** and **Mobilenet V1** models. I mainly tested on the Resnet architecture as it seemed to be the best for Faster RCNN compared to the others. The model for plastic bag detection performs very accurately in high resolution images and closed objects.
+
+* With VGG16, AP for plasticbag = *52.24*.
+* With Resnet101, AP for plasticbag = *62.04*.
 
 **Some of the results:**
 (`plasticbag` only)
